@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>RSS — Rewinding Service Solution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --navy: #0d3a66;
+            --navy-deep: #082138;
+            --blue: #1f74b6;
+            --sky: #bfe4fb;
+            --sky-pale: #eef7fd;
+            --orange: #f2801e;
+            --orange-dim: #f8ad6b;
+            --paper: #ffffff;
+            --paper-tint: #f5f9fc;
+            --ink: #132436;
+            --ink-dim: #5c6c7c;
+            --line: #e1ebf3;
+            --radius: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            background:
+                radial-gradient(ellipse 90% 60% at 50% -8%, var(--sky-pale) 0%, var(--paper-tint) 60%),
+                var(--paper-tint);
+            font-family: "Inter", sans-serif;
+            color: var(--ink);
+            padding: 36px 18px;
+            overflow-x: hidden;
+        }
+
+        .stage {
+            position: relative;
+            width: 100%;
+            max-width: 330px;
+            perspective: 1700px;
+        }
+
+        .card-wrap {
+            width: 100%;
+            aspect-ratio: 0.62/1;
+            max-height: 80vh;
+            position: relative;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            outline: none;
+            opacity: 0;
+            transform: translateY(24px) scale(.97);
+            animation: riseIn .8s cubic-bezier(.16, .9, .28, 1) .1s forwards;
+        }
+
+        @keyframes riseIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .card {
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+            transition: transform .15s ease-out;
+            will-change: transform;
+        }
+
+        .card.flipping {
+            transition: transform .7s cubic-bezier(.4, .1, .2, 1);
+        }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 26px 24px;
+            box-shadow:
+                0 26px 50px -22px rgba(13, 58, 102, .32),
+                0 8px 18px -10px rgba(13, 58, 102, .14);
+        }
+
+        .face.back {
+            transform: rotateY(180deg);
+        }
+
+        /* signature: a single quiet accent bar along the top edge */
+        .topbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            z-index: 0;
+            background: linear-gradient(90deg, var(--navy) 0%, var(--blue) 55%, var(--orange) 100%);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--paper);
+            border: 2px solid var(--navy);
+            /* Optional gold border */
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(13, 58, 102, .18);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Fill the circle */
+        }
+
+        .eyebrow {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 9px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            text-align: right;
+            line-height: 1.6;
+            max-width: 130px;
+        }
+
+        .eyebrow b {
+            color: var(--orange);
+            font-weight: 500;
+        }
+
+        .identity-block {
+            margin-top: 22px;
+        }
+
+        .company-tag {
+            display: inline-block;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 9.5px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px;
+        }
+
+        .name {
+            margin: 0;
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 700;
+            font-size: 44px;
+            line-height: .95;
+            letter-spacing: -1px;
+            color: var(--orange);
+        }
+
+        .name span {
+            display: block;
+            margin-top: 8px;
+            font-size: 16.5px;
+            font-weight: 600;
+            letter-spacing: .01em;
+            line-height: 1.25;
+            color: var(--navy);
+            text-transform: uppercase;
+        }
+
+        .title-divider {
+            width: 70px;
+            height: 3px;
+            margin: 14px 0 12px;
+            border-radius: 50px;
+            background: var(--orange);
+        }
+
+        .role {
+            margin: 0;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: var(--ink-dim);
+            letter-spacing: .03em;
+            max-width: 230px;
+            font-style: italic;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--line);
+            margin: 14px 0;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .contact-item .k {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8.5px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+        }
+
+        .contact-item .k.person-name {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14.5px;
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--orange);
+        }
+
+        .contact-item .v {
+            font-size: 12px;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contact-item .v a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color .2s, color .2s;
+        }
+
+        .contact-item .v a:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .save-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--blue);
+            background: var(--sky-pale);
+            border: 1px solid var(--sky);
+            border-radius: 20px;
+            padding: 4px 9px;
+            cursor: pointer;
+            transition: background .2s, color .2s, border-color .2s, transform .15s;
+            white-space: nowrap;
+        }
+
+        .save-btn:hover {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: #fff;
+        }
+
+        .save-btn:active {
+            transform: scale(.95);
+        }
+
+        .save-btn svg {
+            width: 10px;
+            height: 10px;
+            flex-shrink: 0;
+        }
+
+        /* BACK */
+        .back-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .company-lockup {
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            line-height: 1.15;
+            color: var(--orange);
+        }
+
+        .company-lockup span {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: .01em;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .company-sub {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8.5px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            margin-top: 5px;
+        }
+
+        .back-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--paper);
+            border: 2px solid var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .back-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .services-block {
+            margin-top: 16px;
+        }
+
+        .services-title {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 9px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin: 0 0 9px;
+        }
+
+        .services-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .services-list li {
+            font-size: 9.7px;
+            line-height: 1.3;
+            color: var(--ink);
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .services-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--orange);
+        }
+
+        .map-embed {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            /* Increased from 100px */
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(195, 161, 90, 0.3);
+            margin: 12px 0;
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: all 0.35s ease;
+        }
+
+        .map-embed:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 14px 30px rgba(0, 0, 0, 0.45),
+                0 0 20px rgba(195, 161, 90, 0.25);
+        }
+
+        .map-embed iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            transition: transform 0.4s ease;
+        }
+
+        .map-embed::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.25),
+                    transparent 35%);
+            pointer-events: none;
+        }
+
+        .addr {
+            font-size: 10px;
+            color: var(--ink-dim);
+            line-height: 1.5;
+            text-align: center;
+            padding: 2px 0 4px;
+        }
+
+        .back-foot {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8.5px;
+            letter-spacing: .08em;
+            color: var(--ink-dim);
+        }
+
+        .back-foot a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        .back-foot a:hover {
+            color: var(--orange);
+        }
+
+        .back-foot .tap {
+            color: var(--orange);
+        }
+
+        .hint {
+            text-align: center;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 10.5px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            opacity: 0;
+            animation: fadeIn .8s ease 1.2s forwards;
+            user-select: none;
+        }
+
+        .hint kbd {
+            display: inline-block;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: inherit;
+            color: var(--blue);
+            margin: 0 2px;
+            background: var(--paper);
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .card-wrap {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+
+            .card {
+                transition: none !important;
+            }
+
+            .hint {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        @media (max-width:380px) {
+            .card-wrap {
+                aspect-ratio: .58/1;
+            }
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stage">
+        <div class="card-wrap" id="cardWrap" tabindex="0" role="button"
+            aria-label="Business card. Press Enter or click to flip." aria-pressed="false">
+            <div class="card" id="card">
+
+                <!-- FRONT -->
+                <div class="face front">
+                    <div class="topbar"></div>
+                    <div class="content">
+                        <div class="row-top">
+                            <div class="logo">
+                                <img src="logo.jpg" alt="RSS Logo" />
+                            </div>
+                            <div class="eyebrow">REWINDING SERVICE<br /><b>&amp; SOLUTION</b></div>
+                        </div>
+
+                        <div class="identity-block">
+                            <span class="company-tag">Industrial Motor Specialists</span>
+                            <h1 class="name">RSS<span>Rewinding Service Solution</span></h1>
+                            <div class="title-divider"></div>
+                            <p class="role">Trusted by Industries · Driven by Expertise</p>
+                        </div>
+
+                        <div class="spacer"></div>
+
+                        <div>
+                            <div class="divider"></div>
+                            <div class="contact-grid">
+                                <div class="contact-item">
+                                    <div class="contact-row">
+                                        <span class="k person-name">Mr. Gaurav Deshpande</span>
+                                        <button class="save-btn" type="button"
+                                            onclick="event.stopPropagation(); saveVCard('gaurav');">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 3v13m0 0l-4-4m4 4l4-4M4 21h16" />
+                                            </svg>
+                                            Save
+                                        </button>
+                                    </div>
+                                    <span class="v"><a href="tel:+917874775520">M.: 78747 75520</a></span>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-row">
+                                        <span class="k person-name">Mr. Rajendra Rathod</span>
+                                        <button class="save-btn" type="button"
+                                            onclick="event.stopPropagation(); saveVCard('rajendra');">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 3v13m0 0l-4-4m4 4l4-4M4 21h16" />
+                                            </svg>
+                                            Save
+                                        </button>
+                                    </div>
+                                    <span class="v"><a href="tel:+917069980609">M.: 70699 80609</a></span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="k">Email</span>
+                                    <span class="v"><a
+                                            href="mailto:info@rssrewinding.com">info@rssrewinding.com</a></span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="k">Web</span>
+                                    <span class="v"><a href="https://www.rssrewinding.com" target="_blank"
+                                            rel="noopener">www.rssrewinding.com</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BACK -->
+                <div class="face back">
+                    <div class="topbar"></div>
+                    <div class="content">
+                        <div class="back-head">
+                            <div>
+                                <div class="company-lockup">RSS<span>Rewinding Service Solution</span></div>
+                                <div class="company-sub">Industrial Motor Specialists</div>
+                            </div>
+                            <div class="back-mark">
+                                <img src="logo.jpg" alt="RSS Logo" />
+                            </div>
+                        </div>
+
+                        <div class="services-block">
+                            <p class="services-title">Our Services / Expertise</p>
+                            <ul class="services-list">
+                                <li>Rewinding &amp; Overhauling of AC Generator/Alternator upto 1500 KVA</li>
+                                <li>Servo/DC Motor Rewinding &amp; Repairing</li>
+                                <li>All Types of Submersible Pump Rewinding &amp; Overhauling</li>
+                                <li>Emergency Breakdown Service</li>
+                                <li>24/7 After Service Support</li>
+                            </ul>
+                        </div>
+
+                        <div class="map-embed">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.5289674523124!2d73.22613171159875!3d22.29582597960497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc5827a986d63%3A0x74d69cfa0813fa25!2sJay%20Ranchhod%20Complex%2C%20C%2F21%2C%20Society%202%2C%20Aadhar%20Society%2C%20Waghodia%2C%20Vadodara%2C%20Gujarat%20390019!5e0!3m2!1sen!2sin!4v1783432818282!5m2!1sen!2sin"
+                                loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                                title="RSS Rewinding Service Solution location on Google Maps"></iframe>
+                            <!-- <span class="map-embed-label">Tap to open map</span> -->
+                        </div>
+                        <div class="addr">
+                            Jay Ranchod Complex, Post - Manjusar, Taluka - Savli,<br />District Vadodara - 391775
+                        </div>
+
+                        <div class="back-foot">
+                            <a href="mailto:info@rssrewinding.com">info@rssrewinding.com</a>
+                            <span class="tap">TAP TO RETURN</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <p class="hint"><kbd>hover</kbd> to tilt &nbsp;·&nbsp; <kbd>tap</kbd> to flip</p>
+    </div>
+
+    <script>
+        function saveVCard(person) {
+            const people = {
+                gaurav: {
+                    name: "Gaurav Deshpande",
+                    title: "Managing Partner",
+                    tel: "+91 78747 75520",
+                    email: "gaurav@rssrewinding.com"
+                },
+                rajendra: {
+                    name: "Rajendra Rathod",
+                    title: "Managing Partner",
+                    tel: "+91 70699 80609",
+                    email: "rajendra@rssrewinding.com"
+                }
+            };
+            const p = people[person];
+            if (!p) return;
+            const nameParts = p.name.split(" ");
+            const family = nameParts.pop();
+            const given = nameParts.join(" ");
+            const vcf = [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                `N:${family};${given};;;`,
+                `FN:${p.name}`,
+                "ORG:RSS - Rewinding Service Solution",
+                `TITLE:${p.title}`,
+                `TEL;TYPE=CELL,VOICE:${p.tel}`,
+                `EMAIL;TYPE=INTERNET:${p.email}`,
+                "URL:https://www.rssrewinding.com",
+                "END:VCARD"
+            ].join("\r\n");
+
+            const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = p.name.replace(/\s+/g, "_") + ".vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        (function () {
+            const wrap = document.getElementById("cardWrap");
+            const card = document.getElementById("card");
+            let flipped = false;
+            let rafId = null;
+            const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+
+            function applyTilt(x, y, rect) {
+                const px = (x - rect.left) / rect.width;
+                const py = (y - rect.top) / rect.height;
+                const rotY = (px - 0.5) * 12;
+                const rotX = (0.5 - py) * 8;
+                const baseFlip = flipped ? 180 : 0;
+                card.style.transform = `rotateY(${baseFlip + (flipped ? -rotY : rotY)}deg) rotateX(${rotX}deg)`;
+            }
+            function resetTilt() {
+                card.style.transform = `rotateY(${flipped ? 180 : 0}deg) rotateX(0deg)`;
+            }
+            if (!isCoarse) {
+                wrap.addEventListener("mousemove", (e) => {
+                    const rect = wrap.getBoundingClientRect();
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(() => applyTilt(e.clientX, e.clientY, rect));
+                });
+                wrap.addEventListener("mouseleave", () => {
+                    card.classList.add("flipping");
+                    resetTilt();
+                    setTimeout(() => card.classList.remove("flipping"), 700);
+                });
+            }
+            function doFlip() {
+                flipped = !flipped;
+                card.classList.add("flipping");
+                card.style.transform = `rotateY(${flipped ? 180 : 0}deg) rotateX(0deg)`;
+                wrap.setAttribute("aria-pressed", String(flipped));
+                setTimeout(() => card.classList.remove("flipping"), 700);
+            }
+            wrap.addEventListener("click", doFlip);
+            wrap.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    doFlip();
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>
