@@ -2,7 +2,7 @@ function saveVCard() {
     const p = {
         name: "Rajendra Rathod",
         title: "Managing Partner",
-        tel: "+91 70699 80609",
+        tel: "+91 70699 80600",
         email: "rajendra@rssrewinding.com"
     };
     const nameParts = p.name.split(" ");

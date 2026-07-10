@@ -5,6 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>RSS — Rewinding Service Solution</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/wZp1SK8t/favicon.png" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/wZp1SK8t/favicon.png" />
+
+    <!-- SEO -->
+    <meta name="description" content="RSS Rewinding Service Solution, Vadodara — industrial motor, AC generator/alternator, servo/DC motor & submersible pump rewinding specialists. 24/7 emergency breakdown service. Tap to view contact details and save to your phone." />
+    <meta name="keywords" content="RSS Rewinding Service Solution, motor rewinding Vadodara, AC generator rewinding, alternator rewinding, servo motor rewinding, submersible pump rewinding, industrial motor repair Gujarat, emergency breakdown service" />
+    <meta name="author" content="RSS Rewinding Service Solution" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / WhatsApp, Facebook link preview -->
+    <meta property="og:type" content="business.business" />
+    <meta property="og:title" content="RSS — Rewinding Service Solution" />
+    <meta property="og:description" content="Industrial motor, generator & pump rewinding specialists in Vadodara. Trusted by industries, driven by expertise. Tap to view contact details and save to your phone." />
+    <meta property="og:site_name" content="RSS Rewinding Service Solution" />
+    <meta property="og:image" content="https://i.ibb.co/nsx7LrLH/logo.jpg" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="RSS — Rewinding Service Solution" />
+    <meta name="twitter:description" content="Industrial motor, generator & pump rewinding specialists in Vadodara. 24/7 emergency breakdown service." />
+    <meta name="twitter:image" content="https://i.ibb.co/nsx7LrLH/logo.jpg" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -58,6 +82,7 @@
             width: 100%;
             max-width: 330px;
             perspective: 1700px;
+            -webkit-perspective: 1700px;
         }
 
         .card-wrap {
@@ -66,6 +91,7 @@
             max-height: 80vh;
             position: relative;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
             cursor: pointer;
             outline: none;
             opacity: 0;
@@ -90,6 +116,7 @@
             position: absolute;
             inset: 0;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
             transition: transform .15s ease-out;
             will-change: transform;
         }
@@ -98,12 +125,29 @@
             transition: transform .7s cubic-bezier(.4, .1, .2, 1);
         }
 
+        /* Outer layer: ONLY handles the 3D transform + backface-visibility.
+           iOS Safari fails to hide the back face if border-radius/overflow
+           live on the same element as backface-visibility, so those are
+           moved to .face-inner below. */
         .face {
             position: absolute;
             inset: 0;
-            border-radius: var(--radius);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+
+        .face.back {
+            transform: rotateY(180deg) translateZ(0);
+            -webkit-transform: rotateY(180deg) translateZ(0);
+        }
+
+        /* Inner layer: visual styling only */
+        .face-inner {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
             background: var(--paper);
             border: 1px solid var(--line);
             overflow: hidden;
@@ -113,10 +157,6 @@
             box-shadow:
                 0 26px 50px -22px rgba(13, 58, 102, .32),
                 0 8px 18px -10px rgba(13, 58, 102, .14);
-        }
-
-        .face.back {
-            transform: rotateY(180deg);
         }
 
         /* signature: a single quiet accent bar along the top edge */
@@ -154,7 +194,6 @@
             justify-content: center;
             background: var(--paper);
             border: 2px solid var(--navy);
-            /* Optional gold border */
             flex-shrink: 0;
             box-shadow: 0 4px 10px rgba(13, 58, 102, .18);
         }
@@ -163,7 +202,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* Fill the circle */
         }
 
         .eyebrow {
@@ -435,7 +473,6 @@
             position: relative;
             width: 100%;
             height: 170px;
-            /* Increased from 100px */
             border-radius: 16px;
             overflow: hidden;
             border: 2px solid rgba(195, 161, 90, 0.3);
@@ -567,11 +604,12 @@
 
                 <!-- FRONT -->
                 <div class="face front">
+                  <div class="face-inner">
                     <div class="topbar"></div>
                     <div class="content">
                         <div class="row-top">
                             <div class="logo">
-                                <img src="logo.jpg" alt="RSS Logo" />
+                                <img src="../asset/logo.jpg" alt="RSS Logo" />
                             </div>
                             <div class="eyebrow">REWINDING SERVICE<br /><b>&amp; SOLUTION</b></div>
                         </div>
@@ -614,7 +652,7 @@
                                             Save
                                         </button>
                                     </div>
-                                    <span class="v"><a href="tel:+917069980609">M.: 70699 80609</a></span>
+                                    <span class="v"><a href="tel:+917069980600">M.: 70699 80600</a></span>
                                 </div>
                                 <div class="contact-item">
                                     <span class="k">Email</span>
@@ -629,10 +667,12 @@
                             </div>
                         </div>
                     </div>
+                  </div>
                 </div>
 
                 <!-- BACK -->
                 <div class="face back">
+                  <div class="face-inner">
                     <div class="topbar"></div>
                     <div class="content">
                         <div class="back-head">
@@ -641,7 +681,7 @@
                                 <div class="company-sub">Industrial Motor Specialists</div>
                             </div>
                             <div class="back-mark">
-                                <img src="logo.jpg" alt="RSS Logo" />
+                                <img src="../asset/logo.jpg" alt="RSS Logo" />
                             </div>
                         </div>
 
@@ -661,7 +701,6 @@
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.5289674523124!2d73.22613171159875!3d22.29582597960497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc5827a986d63%3A0x74d69cfa0813fa25!2sJay%20Ranchhod%20Complex%2C%20C%2F21%2C%20Society%202%2C%20Aadhar%20Society%2C%20Waghodia%2C%20Vadodara%2C%20Gujarat%20390019!5e0!3m2!1sen!2sin!4v1783432818282!5m2!1sen!2sin"
                                 loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
                                 title="RSS Rewinding Service Solution location on Google Maps"></iframe>
-                            <!-- <span class="map-embed-label">Tap to open map</span> -->
                         </div>
                         <div class="addr">
                             Jay Ranchod Complex, Post - Manjusar, Taluka - Savli,<br />District Vadodara - 391775
@@ -672,6 +711,7 @@
                             <span class="tap">TAP TO RETURN</span>
                         </div>
                     </div>
+                  </div>
                 </div>
 
             </div>
@@ -692,7 +732,7 @@
                 rajendra: {
                     name: "Rajendra Rathod",
                     title: "Managing Partner",
-                    tel: "+91 70699 80609",
+                    tel: "+91 70699 80600",
                     email: "rajendra@rssrewinding.com"
                 }
             };
@@ -714,15 +754,30 @@
                 "END:VCARD"
             ].join("\r\n");
 
-            const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = p.name.replace(/\s+/g, "_") + ".vcf";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            const filename = p.name.replace(/\s+/g, "_") + ".vcf";
+            const isAndroid = /Android/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Android: navigate straight to the vCard as text/x-vcard content
+                // (no "download" attribute) so Chrome/Android hands it to the
+                // Contacts app chooser directly instead of just saving a file
+                // to Downloads.
+                const dataUri = "data:text/x-vcard;charset=utf-8," + encodeURIComponent(vcf);
+                window.location.href = dataUri;
+            } else {
+                // iOS / desktop: Blob download works reliably here — iOS Safari
+                // shows the "Add to Contacts" preview when the .vcf is opened,
+                // and desktop OSes import it via double-click.
+                const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 3000);
+            }
         }
 
         (function () {
