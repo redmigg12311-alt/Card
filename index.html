@@ -87,8 +87,8 @@
 
         .card-wrap {
             width: 100%;
-            aspect-ratio: 0.62/1;
-            max-height: 80vh;
+            aspect-ratio: 0.56/1;
+            max-height: 92vh;
             position: relative;
             transform-style: preserve-3d;
             -webkit-transform-style: preserve-3d;
@@ -153,7 +153,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            padding: 26px 24px;
+            padding: 22px 20px;
             box-shadow:
                 0 26px 50px -22px rgba(13, 58, 102, .32),
                 0 8px 18px -10px rgba(13, 58, 102, .14);
@@ -428,8 +428,9 @@
             object-fit: cover;
         }
 
+        /* SERVICES -> IMAGE GRID */
         .services-block {
-            margin-top: 16px;
+            margin-top: 10px;
         }
 
         .services-title {
@@ -438,109 +439,167 @@
             letter-spacing: .14em;
             text-transform: uppercase;
             color: var(--blue);
-            margin: 0 0 9px;
+            margin: 0 0 7px;
         }
 
-        .services-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+        }
+
+        .service-item {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            gap: 4px;
         }
 
-        .services-list li {
-            font-size: 9.7px;
-            line-height: 1.3;
-            color: var(--ink);
-            padding-left: 12px;
-            position: relative;
-        }
-
-        .services-list li::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 5px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--orange);
-        }
-
-        .map-embed {
+        .service-img {
             position: relative;
             width: 100%;
-            height: 170px;
-            border-radius: 16px;
+            aspect-ratio: 1/1;
+            border-radius: 12px;
             overflow: hidden;
-            border: 2px solid rgba(195, 161, 90, 0.3);
-            margin: 12px 0;
-            box-shadow:
-                0 8px 20px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            transition: all 0.35s ease;
+            background: linear-gradient(135deg, var(--sky-pale), var(--sky));
+            border: 1px solid var(--line);
         }
 
-        .map-embed:hover {
-            transform: translateY(-3px);
-            box-shadow:
-                0 14px 30px rgba(0, 0, 0, 0.45),
-                0 0 20px rgba(195, 161, 90, 0.25);
-        }
-
-        .map-embed iframe {
+        .service-img img {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
-            border: none;
-            transition: transform 0.4s ease;
+            object-fit: cover;
         }
 
-        .map-embed::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top,
-                    rgba(0, 0, 0, 0.25),
-                    transparent 35%);
-            pointer-events: none;
-        }
-
-        .addr {
-            font-size: 10px;
-            color: var(--ink-dim);
-            line-height: 1.5;
+        .service-label {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8.5px;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--navy);
             text-align: center;
-            padding: 2px 0 4px;
+        }
+
+        .location-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            background: var(--sky-pale);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 10px 12px;
+            margin: 10px 0 8px;
+        }
+
+        .location-pin {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .location-pin svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .location-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .location-label {
+            display: block;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8.5px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 4px;
+        }
+
+        .location-addr {
+            display: block;
+            font-size: 10.5px;
+            line-height: 1.45;
+            color: var(--ink-dim);
+        }
+
+        .directions-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--navy);
+            background: var(--paper);
+            border: 1.5px solid var(--navy);
+            border-radius: 30px;
+            padding: 8px 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background .2s, color .2s, transform .15s;
+        }
+
+        .directions-btn:hover {
+            background: var(--navy);
+            color: #fff;
+        }
+
+        .directions-btn:active {
+            transform: scale(.97);
+        }
+
+        .directions-btn svg {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
         }
 
         .back-foot {
             margin-top: auto;
-            padding-top: 10px;
+            padding-top: 9px;
             border-top: 1px solid var(--line);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-family: "JetBrains Mono", monospace;
             font-size: 8.5px;
-            letter-spacing: .08em;
+            letter-spacing: .06em;
             color: var(--ink-dim);
+            gap: 8px;
         }
 
         .back-foot a {
             color: var(--blue);
             text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .back-foot a:hover {
             color: var(--orange);
         }
 
-        .back-foot .tap {
-            color: var(--orange);
+        .back-foot .gst {
+            flex-shrink: 0;
+        }
+
+        .back-foot .gst b {
+            color: var(--navy);
+            font-weight: 600;
         }
 
         .hint {
@@ -585,7 +644,7 @@
 
         @media (max-width:380px) {
             .card-wrap {
-                aspect-ratio: .58/1;
+                aspect-ratio: .52/1;
             }
         }
 
@@ -686,29 +745,66 @@
                         </div>
 
                         <div class="services-block">
-                            <p class="services-title">Our Services / Expertise</p>
-                            <ul class="services-list">
-                                <li>Rewinding &amp; Overhauling of AC Generator/Alternator upto 1500 KVA</li>
-                                <li>Servo/DC Motor Rewinding &amp; Repairing</li>
-                                <li>All Types of Submersible Pump Rewinding &amp; Overhauling</li>
-                                <li>Emergency Breakdown Service</li>
-                                <li>24/7 After Service Support</li>
-                            </ul>
+                            <p class="services-title">Our Expertise</p>
+                            <div class="services-grid">
+                                <div class="service-item">
+                                    <div class="service-img">
+                                        <img src="../asset/Induction motor.png" alt="Induction Motor Rewinding"
+                                            onerror="this.style.display='none'" />
+                                    </div>
+                                    <span class="service-label">Induction Motor</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-img">
+                                        <img src="../asset/AC generator.png" alt="AC Generator Rewinding"
+                                            onerror="this.style.display='none'" />
+                                    </div>
+                                    <span class="service-label">AC Generator</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-img">
+                                        <img src="../asset/Submersible pump.png" alt="Submersible Pump Repair"
+                                            onerror="this.style.display='none'" />
+                                    </div>
+                                    <span class="service-label">Submersible Pump</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-img">
+                                        <img src="../asset/24.png" alt="24x7 Emergency Service"
+                                            onerror="this.style.display='none'" />
+                                    </div>
+                                    <span class="service-label">24x7 Emergency</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="map-embed">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3687.5815674772844!2d73.18718217529668!3d22.443845479583597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjLCsDI2JzM3LjgiTiA3M8KwMTEnMjMuMSJF!5e0!3m2!1sen!2sin!4v1783669685996!5m2!1sen!2sin"
-                                loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-                                title="RSS Rewinding Service Solution location on Google Maps"></iframe>
+                        <div class="location-card">
+                            <div class="location-pin">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </div>
+                            <div class="location-info">
+                                <span class="location-label">Visit Us</span>
+                                <span class="location-addr">Jay Ranchod Complex, Post - Manjusar, Taluka - Savli,
+                                    District Vadodara - 391775</span>
+                            </div>
                         </div>
-                        <div class="addr">
-                            Jay Ranchod Complex, Post - Manjusar, Taluka - Savli,<br />District Vadodara - 391775
-                        </div>
+                        <a class="directions-btn"
+                            href="https://www.google.com/maps/search/?api=1&query=22.4438455,73.1897571"
+                            target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18l6-6-6-6" />
+                            </svg>
+                            Get Directions
+                        </a>
 
                         <div class="back-foot">
                             <a href="mailto:info@rssrewinding.com">info@rssrewinding.com</a>
-                            <span class="tap">TAP TO RETURN</span>
+                            <span class="gst">GSTIN <b>24ABOFR2030E1ZJ</b></span>
                         </div>
                     </div>
                   </div>
